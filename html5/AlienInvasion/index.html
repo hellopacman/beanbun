@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Alien Invasion</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css">
+<!--
+		<script type="text/javascript" src="js/game.js"></script>
+-->
+	</head>
+
+	<body>
+		<div id="container">
+			<canvas id="game" width="320" height="480">Your browser doesn't support canvas</canvas>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		var canvas = document.getElementById("game");
+		var ctx = canvas.getContext && canvas.getContext("2d");
+		if(!ctx)
+		{
+			alert("您的浏览器不支持html5Canvas技术");
+		}
+		else
+		{
+			startGame();
+		}
+
+		//-------开始游戏---------
+		function startGame()
+		{
+
+			
+		}
+
+
+	</script>
+</html>
