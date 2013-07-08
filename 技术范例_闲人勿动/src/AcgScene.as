@@ -1,6 +1,7 @@
 ﻿package
 {
 	import flash.display.MovieClip;
+	import flash.events.*;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.Timer;
@@ -30,6 +31,8 @@
 		//------构造函数----
 		public function AcgScene()
 		{
+			
+			
 			_lastFrame = 0;
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			_lineTimer = new Timer(TEXT_INTERVAL);
