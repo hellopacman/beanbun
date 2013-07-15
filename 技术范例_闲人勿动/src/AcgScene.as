@@ -11,6 +11,7 @@
 	/*----------场景剪辑的基类---------
 ``	场景中的对白文本框需命名为 dh，并且只能有一个
 	场景中对白输入框需需命名为 tc，并且只能有一个
+	//pacman 2013-7-15 尝试取消 tc 输入框， 使用dh直接输入对白
 	*/
 	public class AcgScene extends MovieClip
 	{
@@ -61,10 +62,10 @@
 		{
 			if (_lastFrame != this.currentFrame)		//开始播放新的一帧
 			{
-				if (tc != null)		//如果舞台上有放置对白文本框
+				if (dh != null)		//如果舞台上有放置对白文本框
 				{
 					//获取舞台上编辑好的台词
-					var txt = tc.text;
+					var txt = dh.text;
 					
 					
 					//重置对白框
