@@ -7,6 +7,7 @@
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import flash.sensors.Accelerometer;
+	import flash.text.TextFormat;
 	
 	/*----------场景剪辑的基类---------
 ``	场景中的对白文本框需命名为 dh，并且只能有一个
@@ -16,6 +17,8 @@
 	public class AcgScene extends MovieClip
 	{
 		//-----静态常量-----
+		static const DIALOG_LETTER_SPACE:Number = 0;		//台词文字间距
+		static const CHAR_CODE_ENTER:Number = 13;			//台词文本分段符号
 		static const LINES_DELIMITER:String = "|";			//台词文本分段符号
 		static const DIALOG_START_SYMBOL:String = "『";		//对白开始标识符
 		static const DIALOG_END_SYMBOL:String = "』";		//对白结束标识符
@@ -51,8 +54,20 @@
 		{
 			_curLine = value;
 			_curLineStr = _lineArr[_curLine];
+			
+			//对原始文本进行一些处理
+			//pacman 2013-7-20 删除开头和末尾的回车符号
+    		//trace(_curLineStr.toString());
+			var pattern:RegExp = new RegExp ( '^\r+' );
+			//trace(_curLineStr.search(pattern));
+			_curLineStr = _curLineStr.replace ( pattern,'' );
+			pattern = new RegExp ( '\r+$' );
+			//trace(_curLineStr.search(pattern));
+			_curLineStr = _curLineStr.replace ( pattern,'' );
+			
 			//pacman 2013-7-17 在当前对白前后加上起始/结束标识符
 			_curLineStr = DIALOG_START_SYMBOL + _curLineStr + DIALOG_END_SYMBOL;
+			
 						
 			_curLineLength = _curLineStr.length;
 		}
@@ -79,6 +94,12 @@
 					//切割对白分段
 					_lineArr = txt.split(LINES_DELIMITER);
 												
+					//pacman 2013-7-21 设置文本框样式
+					//对于【动态文本框】，在ide中设置字距不管用么？
+          			var format:TextFormat = new TextFormat();
+            		format.letterSpacing  = DIALOG_LETTER_SPACE;
+					dh.defaultTextFormat = format;
+
 					//开始输出台词
 					startOutputLine();
 				}
@@ -107,7 +128,9 @@
 		private function onLineTimer(evt:TimerEvent):void
 		{
 			//显示当前台词字符
-			dh.appendText(_curLineStr.charAt(_curLinePos));
+			//pacman 2013-7-20 appendText会忽略对白字串中的换行符号，所以改用 +=
+			//dh.appendText(_curLineStr.charAt(_curLinePos));	
+			dh.text += (_curLineStr.charAt(_curLinePos));
 			
 			//接下来是否已经播放到台词末尾
 			_curLinePos ++;
