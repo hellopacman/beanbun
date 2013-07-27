@@ -77,12 +77,7 @@
 		{
 			return _curLine;
 		}
-<<<<<<< HEAD
-				
-=======
-		
-		
->>>>>>> 93ed8871a658572863eb80de5fcef699ac107e42
+
 		//---事件处理：enterFrame---
 		private function onEnterFrame(evt:Event):void
 		{
