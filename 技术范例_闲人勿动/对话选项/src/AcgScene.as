@@ -16,6 +16,8 @@
 	2013-7-25 pacman 为实现在时间轴上制作转场特效，需要对程序进行一些改动
 	2013-7-28 又重新还原对白显示框，因为原先直接在显示框中编辑台词的做法，有时会造成台词播放时闪动
 	2013-8-27 对白编辑框从dh改名为_dialog_edit
+	2013-8-29 如果没输入台词，且没有执行hold的话，会停在当前帧，没有点击继续提示，点击屏幕后进入下一帧
+	当然这不是个正常使用的情况；空白台词和hold操作总是要组合使用的
 	*/
 	public class AcgScene extends MovieClip
 	{
@@ -58,11 +60,12 @@
 			_curDialogueStr = _dialogueArr[_curDialogueIndex];
 			
 			//对原始文本进行一些处理
-			//pacman 2013-7-20 删除开头和末尾的回车符号
-			var pattern:RegExp = new RegExp ( '^\r+' );
-			_curDialogueStr = _curDialogueStr.replace ( pattern,'' );
-			pattern = new RegExp ( '\r+$' );
-			_curDialogueStr = _curDialogueStr.replace ( pattern,'' );
+			//pacman 2013-7-20 删除开头和末尾的空白符号
+			_curDialogueStr = Util.removeWhiteSpace(_curDialogueStr, Util.REMOVE_WSPACE_MODE_START_AND_END);
+			//var pattern:RegExp = new RegExp ( '^\r+' );
+//			_curDialogueStr = _curDialogueStr.replace ( pattern,'' );
+//			pattern = new RegExp ( '\r+$' );
+//			_curDialogueStr = _curDialogueStr.replace ( pattern,'' );
 			
 			//pacman 2013-7-17 在当前对白前后加上起始/结束标识符
 			_curDialogueStr = DIALOG_START_SYMBOL + _curDialogueStr + DIALOG_END_SYMBOL;
@@ -80,26 +83,28 @@
 			if (_lastFrame != this.currentFrame)		//开始播放新的一帧
 			{
 				
-				if (_dialog_edit != null)		//如果舞台上有放置对白文本框
+				if (_dialog_edit != null )		//如果舞台上有放置对白编辑框
 				{
-					//获取舞台上编辑好的台词
-					var txt = _dialog_edit.text;
-					
-						
-					//切割对白分段
-					_dialogueArr = txt.split(LINES_DELIMITER);
+					//获取舞台上编辑好的台词，删除开头和末尾的whiteSpace
+					var txt = Util.removeWhiteSpace(_dialog_edit.text, Util.REMOVE_WSPACE_MODE_START_AND_END);
+					if (txt != "")
+					{
+						//切割对白分段
+						_dialogueArr = txt.split(LINES_DELIMITER);
 												
-					//pacman 2013-7-21 设置文本框样式
-					//对于【动态文本框】，在ide中设置字距不管用么？
-          			var format:TextFormat = new TextFormat();
-            		format.letterSpacing  = DIALOGUE_LETTER_SPACE;
-					_dialog.defaultTextFormat = format;
+						//pacman 2013-7-21 设置文本框样式
+						//对于【动态文本框】，在ide中设置字距不管用么？
+          				var format:TextFormat = new TextFormat();
+            			format.letterSpacing  = DIALOGUE_LETTER_SPACE;
+						_dialog.defaultTextFormat = format;
 	
-					//开始输出台词
-					startOutputLine();
-					_lastFrame = this.currentFrame;
+						//开始输出台词
+						startOutputLine();
+						_lastFrame = this.currentFrame;
+					}
 				}
-				/*	pacman 2013-7-28 没有手动台词的帧也默认stop，不再自动nextFrame
+				//pacman 2013-7-28 没有手动台词的帧不再自动nextFrame，因为此时可能正在等待玩家的输入：点选对话项什么的
+				/*	
 				else if(!_isHold)
 				{
 					_lastFrame = this.currentFrame;		//pacman 2013-7-25 执行nextFrame貌似会跳过剩余帧脚本，所以要把这一行放在nextFrame前面
@@ -223,6 +228,8 @@
 			_curDialoguePos = 0;
 		}
 		*/
+		
+		
 		
 
 	}//end class
