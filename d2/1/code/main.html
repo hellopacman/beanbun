@@ -8,7 +8,9 @@
 	</head>
 	
 	<body>
-		<div id="console">123</div>		
+		<div id="console">123</div>	
+		<div id="out">123</div>	
+		<div id="setClass">setClass</div>	
 	</body>
 	
 </html>
@@ -20,6 +22,17 @@
 	var console = document.getElementById("console");
 	var char = new Character();
 	showProp(char);
+	
+	var setClass = document.getElementById("setClass");
+	setClass.addEventListener("mousedown", onPressed, false);
+	setClass.addEventListener("mousedown", onPressed, false);
+	
+	function onPressed(evt)
+	{
+		char.setClass(SOR);
+		showProp(char);
+	}
+	
 	
 	//显示对象的属性
 	function showProp(obj)
