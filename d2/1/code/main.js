@@ -69,27 +69,32 @@ var ASN = i ++;		//刺客
 var T_CHRTR = new Array();
 //亚马逊
 T_CHRTR[AMA] = new Object();		
-T_CHRTR[AMA].initStr = 20;			//起始力量
-T_CHRTR[AMA].initDex = 25;			//起始敏捷
-T_CHRTR[AMA].initVit = 20;			//起始活力
-T_CHRTR[AMA].initEng = 15;			//起始能量
-T_CHRTR[AMA].initLife = 50;			//起始生命
-T_CHRTR[AMA].lifePLv = 2;			//每升一级增加的生命
-T_CHRTR[AMA].manaPlv = 1.5;			//每升一级增加的魔法
-T_CHRTR[AMA].lifePVit = 3;			//每点活力增加的生命
-T_CHRTR[AMA].manaPEng = 1.5;		//每点能量增加的魔法
+T_CHRTR[AMA].INIT_STR = 20;			//起始力量
+T_CHRTR[AMA].INIT_DEX = 25;			//起始敏捷
+T_CHRTR[AMA].INIT_VIT = 20;			//起始活力
+T_CHRTR[AMA].INIT_ENG = 15;			//起始能量
+T_CHRTR[AMA].INIT_LIFE = 50;			//起始生命
+T_CHRTR[AMA].LIFE_PER_LV = 2;			//每升一级增加的生命
+T_CHRTR[AMA].MANA_PER_LV = 1.5;			//每升一级增加的魔法
+T_CHRTR[AMA].LIFE_PER_VIT = 3;			//每点活力增加的生命
+T_CHRTR[AMA].MANA_PER_ENG = 1.5;		//每点能量增加的魔法
 
 
 
 //角色定义
-function Character()
+function Character(class_)
 {
-	//成员变量
-	this._class_ = 0;	//职业
+	//成员变量声明
+	this._class = 0;	//职业
 	this._name = "";	//名称
 	this._lv = 0;		//等级
 	
-	this._str = 0;		//力量
+	//--力量
+	this._str = 0;		//当前力量
+	this._assignedStr = 0;		//力量配点
+	this._bonusStr = 0;			//力量加成
+	this._pctBonusStr = 0;		//力量加成(百分比)
+	
 	this._dex = 0;		//敏捷
 	this._vit = 0;		//活力
 	this._eng = 0;		//能量
@@ -97,6 +102,10 @@ function Character()
 	this._life = 0;		//生命
 	this._mana = 0;		//魔法
 	
+	
+	//初始设置
+	this.setClass(class_);
+	this.setLv(1);
 }
 
 //----接口 IInvalidate---
@@ -115,18 +124,46 @@ Character.prototype.onTick = function()
 
 
 //设置class
-Character.prototype.setClass = function(class_)
+Character.prototype.setClass = function(value)
 {
-	this._class_ = class_;
+	this._class = value;
 	
 	this.invalidate();
 }
 
+//设置lv
+Character.prototype.setLv = function(value)
+{
+	this._lv = value;
+	
+	this.invalidate();
+}
+
+//设置str配点
+Character.prototype.setAssignedStr = function(value)
+{
+	this._assignedStr = value;
+	
+	this.invalidate();
+}
+
+
 //-- 更新链路
 //全部更新
+var ttttt = 0;
 Character.prototype.updateAll = function()
 {
-	alert("updateAll");
+	//alert("updateAll");
+	console.log(ttttt ++);		
+			
+	//-- 重算str
+	//重算bonusStr 
+	//to do
+	//重算pctBonusStr 
+	//to do
+	//最后结果
+	this._str = T_CHRTR[this._class].INIT_STR + this._assignedStr + this._bonusStr + this._pctBonusStr;
+	
 }
 
 

@@ -8,9 +8,9 @@
 	</head>
 	
 	<body>
-		<div id="console">123</div>	
+		<div id="output">123</div>	
 		<div id="out">123</div>	
-		<div id="setClass">setClass</div>	
+		<div id="addStr">str+1</div>	
 	</body>
 	
 </html>
@@ -19,28 +19,26 @@
 <script>
 
 	//初始化
-	var console = document.getElementById("console");
-	var char = new Character();
-	showProp(char);
+	var output = document.getElementById("output");
+	var char = new Character(AMA);
+	window.setInterval("showProp(char);", 25);
 	
-	var setClass = document.getElementById("setClass");
-	setClass.addEventListener("mousedown", onPressed, false);
-	setClass.addEventListener("mousedown", onPressed, false);
+	var addStr = document.getElementById("addStr");
+	addStr.addEventListener("mousedown", onPressed, false);
+	addStr.addEventListener("mousedown", onPressed, false);
 	
 	function onPressed(evt)
 	{
-		char.setClass(SOR);
-		showProp(char);
+		char.setAssignedStr(char._assignedStr + 1);
 	}
-	
 	
 	//显示对象的属性
 	function showProp(obj)
 	{
-	 	console.innerHTML = "";
+	 	output.innerHTML = "";
 		for (var elmt in obj)
 		{
-			console.innerHTML += elmt + ":" + obj[elmt] + " ";
+			output.innerHTML += elmt + ":" + obj[elmt] + " ";
 		}
 	}
 	
