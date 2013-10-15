@@ -89,17 +89,28 @@ function Character(class_)
 	this._name = "";	//名称
 	this._lv = 0;		//等级
 	
-	//--力量
-	this._str = 0;		//当前力量
-	this._assignedStr = 0;		//力量配点
-	this._bonusStr = 0;			//力量加成
-	this._pctBonusStr = 0;		//力量加成(百分比)
+	//--力量 ---
+	this._totalStr = 0;				//当前力量
 	
 	this._dex = 0;		//敏捷
-	this._vit = 0;		//活力
+	
+	//-- 活力 ---
+	this._totalVit = 0;			//总活力
+	this._basicVit = 0;			//基础活力
+	this._bonusVit = 0;			//活力加成
+	this._pctBonusVit = 0;		//活力加成(百分比)
+	this._toRecalTotalVit = false;		//将要重算总活力
+	
 	this._eng = 0;		//能量
 	
-	this._life = 0;		//生命
+	//-- 生命 ---
+	this._totalLife = 0;			//总生命
+	this._basicLife = 0;			//基础生命
+	this._bonusLife = 0;			//生命加成
+	this._pctBonusLife = 0;			//生命加成(百分比)
+	this._toRecalBasicLife = false;		//将要重算基础生命
+	this._toRecalTotalLife = false;		//将要重算总生命
+	
 	this._mana = 0;		//魔法
 	
 	
@@ -117,7 +128,7 @@ Character.prototype.invalidate = function()
 
 Character.prototype.onTick = function()
 {
-	this.updateAll();
+	this.update();
 }
 //end IInvalidate
 
@@ -139,30 +150,55 @@ Character.prototype.setLv = function(value)
 	this.invalidate();
 }
 
-//设置str配点
-Character.prototype.setAssignedStr = function(value)
+
+//设置基础vit
+Character.prototype.setBasicVit = function(value)
 {
-	this._assignedStr = value;
+	this._basicVit = value;
+	this.invalidate();	
 	
-	this.invalidate();
+	//连锁
+	this.toRecalTotalVit();
+}
+
+//-- 计划重算
+//总体力
+Character.prototype.toRecalTotalVit = function()
+{
+	this._toRecalTotalVit = true;
+
+	//连锁
+	this.toRecalBasicLife();
+}
+
+//总生命
+Character.prototype.toRecalBasicLife = function()
+{
+	this._toRecalBasicLife = true;
+
+	//连锁
+	this.toRecalTotalLife();
 }
 
 
 //-- 更新链路
 //全部更新
-var ttttt = 0;
-Character.prototype.updateAll = function()
+Character.prototype.update = function()
 {
-	//alert("updateAll");
-	console.log(ttttt ++);		
-			
-	//-- 重算str
-	//重算bonusStr 
-	//to do
-	//重算pctBonusStr 
-	//to do
-	//最后结果
-	this._str = T_CHRTR[this._class].INIT_STR + this._assignedStr + this._bonusStr + this._pctBonusStr;
+	//alert("update");
+	
+	//总体力
+	is(this._toRecalTotalVit)
+	{
+		this._totalVit = this._basicVit + this._bonusVit + this._pctBonusVit;
+	}
+	
+	//总生命
+	is(this._toRecalTotalLife)
+	{
+		this._totalVit = this._basicVit + this._bonusVit + this._pctBonusVit;
+	}
+	
 	
 }
 
