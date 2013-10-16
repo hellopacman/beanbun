@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	 <title>skeleton</title>
+	 <!--link rel="stylesheet" href="style.css"-->
+	</head>
+	
+	<body>
+		<div id="output">123</div>	
+		<div id="out">123</div>	
+		<div id="addStr">vit+1</div>	
+	</body>
+	
+</html>
+
+<script src="main.js"></script>
+<script>
+
+	//初始化
+	var output = document.getElementById("output");
+	var char = new Character(AMA);
+	window.setInterval("showProp(char);", 25);
+	
+	var addStr = document.getElementById("addStr");
+	addStr.addEventListener("mousedown", onPressed, false);
+	addStr.addEventListener("mousedown", onPressed, false);
+	
+	function onPressed(evt)
+	{
+		char.setBasicVit(char._basicVit + 1);
+	}
+	
+	//显示对象的属性
+	function showProp(obj)
+	{
+	 	output.innerHTML = "";
+		for (var elmt in obj)
+		{
+			output.innerHTML += elmt + ":" + obj[elmt] + " ";
+		}
+	}
+	
+	
+</script>
