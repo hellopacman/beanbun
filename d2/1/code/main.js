@@ -1,17 +1,17 @@
-var out = document.getElementById("out");
-/**************
-Tick管理器
-****************/
-var TICK_INTERVAL = 40;		//tick间隔(毫秒)
+
+/*********************************
+		Tick管理器
+***********************************/
 
 //pacman 2013-10-13 构造
 function TickMgr()
 {
-	this._invalidateList = new Array();
-	
-	
-	
-	this.test = 0;
+	this._intervalID = undefined;			//intevalID
+	this._tickNo = 0;
+	this._interval = undefined;
+	this._arrInvalidateList = new Array();			//失效列表
+	this._arrTickCbList = new Array();			//Tick回调列表
+
 }
 
 //pacman 2013-10-13 单例
@@ -24,37 +24,103 @@ TickMgr.prototype.tick = function()
 	//this指向的是window，而不是TickMgr.instance
 	//解决的办法是setInerval的时候调用"TickMgr.instance.tick();"
 	//而不是TickMgr.instance.tick
-	this.test ++;
-	out.innerHTML = "tick: " + this.test;
-	
-	//执行invalidate回调
-	for (var i = 0 ; i < this._invalidateList.length; i ++)
+	this._tickNo ++;
+	var tick = {tickNo: this._tickNo};		//传递给onTickListener的Tick对象
+
+	//先执行invalidate回调
+	//因为invalidate回调与计算有关，需要先计算
+	for (var i = 0 ; i < this._arrInvalidateList.length; i ++)
 	{
-		if (this._invalidateList[i] != undefined)
+		if (this._arrInvalidateList[i] != undefined)
 		{
 			//执行回调
-			this._invalidateList[i].onTick();
+			this._arrInvalidateList[i].onTick();
 		}
 	}
 	
-	//清空回调列表
-	this._invalidateList = new Array();
+	//清空invalidate回调列表
+	this._arrInvalidateList = new Array();
+
+
+	//执行tick回调
+	for (var j = 0 ; j < this._arrTickCbList.length; j ++)
+	{
+		var cbPair = this._arrTickCbList[j];
+		if(cbPair.cbCaller != undefined && cbPair.cbFunc != undefined)
+		{
+			cbPair.cbFunc.call(cbPair.cbCaller, tick);
+		}
+	}
+
 }
 
 //pacman 2013-10-13 注册invalidate对象
 TickMgr.prototype.regInvalid = function(invalidater)
 {
-	if(this._invalidateList.indexOf(invalidater) == -1)
+	if(this._arrInvalidateList.indexOf(invalidater) == -1)
 	{
-		this._invalidateList.push(invalidater);
+		this._arrInvalidateList.push(invalidater);
 	}
 }
 
-setInterval("TickMgr.instance.tick();", TICK_INTERVAL);
+//pacman 2013-10-19 启动tick
+TickMgr.prototype.clearAndStartTick = function(interval)
+{
+	if (this._intervalID != undefined)
+	{
+		clearInterval(this._intervalID);
+		this._tickNo = 0;
+	}
+	this._intervalID = setInterval("TickMgr.instance.tick();", interval);		//启动tick
+}
 
-/**************
-角色
-****************/
+//pacman 2013-10-19 暂停tick
+TickMgr.prototype.pauseTick = function()
+{
+}
+
+//pacman 2013-10-19 继续tick
+TickMgr.prototype.resumeTick = function()
+{
+}
+
+//pacman 2013-10-19 添加Tick回调
+TickMgr.prototype.addTickListener = function(cbCaller, cbFunc)
+{
+	//检查是否已经添加
+	for (var i =0; i < this._arrTickCbList.length;  i ++)
+	{
+		if (this._arrTickCbList[i].cbCaller == cbCaller && this._arrTickCbList[i].cbFunc == cbFunc)
+		{
+			return;
+		}
+	}
+
+	//添加
+	var cbPair = new Object();
+	cbPair.cbCaller = cbCaller;
+	cbPair.cbFunc = cbFunc;
+	this._arrTickCbList.push(cbPair);
+}
+
+//pacman 2013-10-19 移除Tick回调
+TickMgr.prototype.removeTickListener = function(cbCaller, cbFunc)
+{
+	for (var i = this._arrTickCbList.length - 1; i >= 0 ;  i --)
+	{
+		if (this._arrTickCbList[i].cbCaller == cbCaller && this._arrTickCbList[i].cbFunc == cbFunc)
+		{
+			this._arrTickCbList.splice(i, 1);
+		}
+	}
+
+
+}
+
+
+/*********************************
+		角色模板数据
+***********************************/
 //角色职业编号 (从0开始的正整数)
 var i = 0;
 var AMA = i ++;		//亚马逊
@@ -80,8 +146,12 @@ T_CHRTR[AMA].LIFE_PER_VIT = 3;			//每点活力增加的生命
 T_CHRTR[AMA].MANA_PER_ENG = 1.5;		//每点能量增加的魔法
 
 
+/*********************************
+			角色类
+***********************************/
+//pacman 2013-10-19 使用失效和手动激活临近节点重算的功能来优化数据重算
 
-//角色定义
+//pacman 2013-10-19  构造
 function Character(class_)
 {
 	//成员变量声明

@@ -19,19 +19,33 @@
 <script>
 
 	//初始化
+
 	var output = document.getElementById("output");
-	var char = new Character(AMA);
-	window.setInterval("showProp(char);", 25);
+	var out = document.getElementById("out");
 	
 	var addStr = document.getElementById("addStr");
 	addStr.addEventListener("mousedown", onPressed, false);
 	addStr.addEventListener("mousedown", onPressed, false);
-	
+
+	var character = new Character(AMA);
+
+	TickMgr.instance.clearAndStartTick(40);				//tick interval ms
+	TickMgr.instance.addTickListener(this, onTick);
+	// TickMgr.instance.addTickListener(this, onTick);		//pacman 2013-10-19 测试重复添加 -ok- 多次执行不会重复添加
+	// TickMgr.instance.removeTickListener(this, onTick);	//pacman 2013-10-19 测试移除	-ok-
+
+
 	function onPressed(evt)
 	{
-		char.setBasicVit(char._basicVit + 1);
+		character.setBasicVit(character._basicVit + 1);
 	}
 	
+	function onTick(tick)
+	{
+		out.innerHTML = tick.tickNo;
+		showProp(character);
+	}
+
 	//显示对象的属性
 	function showProp(obj)
 	{
