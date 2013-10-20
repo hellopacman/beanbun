@@ -8,9 +8,18 @@
 	</head>
 	
 	<body>
+		
+		
 		<div id="output">123</div>	
 		<div id="out">123</div>	
-		<div id="addStr">vit+1</div>	
+		<div>
+			<span id="addStr">str+1</span>
+			<span id="addDex">dex+1</span>			
+			<span id="addVit">vit+1</span>
+			<span id="addEng">eng+1</span>			
+		</div>	
+		
+		
 	</body>
 	
 </html>
@@ -19,13 +28,21 @@
 <script>
 
 	//初始化
-
 	var output = document.getElementById("output");
 	var out = document.getElementById("out");
 	
-	var addStr = document.getElementById("addStr");
-	addStr.addEventListener("mousedown", onPressed, false);
-	addStr.addEventListener("mousedown", onPressed, false);
+	var dom_addStr = document.getElementById("addStr");				//str + 1
+	dom_addStr.addEventListener("mousedown", onPressed, false);
+
+	var dom_addDex = document.getElementById("addDex");				//dex + 1
+	dom_addDex.addEventListener("mousedown", onPressed, false);
+
+	var dom_addVit = document.getElementById("addVit");				//vit + 1
+	dom_addVit.addEventListener("mousedown", onPressed, false);
+
+	var dom_addEng = document.getElementById("addEng");				//eng + 1
+	dom_addEng.addEventListener("mousedown", onPressed, false);
+
 
 	var character = new Character(AMA);
 
@@ -37,7 +54,31 @@
 
 	function onPressed(evt)
 	{
-		character.setBasicVit(character._basicVit + 1);
+		//点击 增加力量
+		if (evt.target == dom_addStr)
+		{
+			character.setBasicStr(character._basicStr + 1);
+		}
+		
+		//点击 增加敏捷
+		if (evt.target == dom_addDex)
+		{
+			character.setBasicDex(character._basicDex + 1);
+		}
+
+		//点击 增加体力
+		if (evt.target == dom_addVit)
+		{
+			character.setBasicVit(character._basicVit + 1);
+		}
+		
+
+		//点击 增加能量
+		if (evt.target == dom_addEng)
+		{
+			character.setBasicEng(character._basicEng + 1);
+		}
+		
 	}
 	
 	function onTick(tick)
@@ -52,6 +93,7 @@
 	 	output.innerHTML = "";
 		for (var elmt in obj)
 		{
+			if (typeof(obj[elmt]) == "function") continue;		//不显示函数体
 			output.innerHTML += elmt + ":" + obj[elmt] + " ";
 		}
 	}
