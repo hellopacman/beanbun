@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	 <title>skeleton</title>
+	 <title>d2</title>
 	 <!--link rel="stylesheet" href="style.css"-->
 	</head>
 	
@@ -16,15 +16,18 @@
 			<span id="addStr">str+1</span>
 			<span id="addDex">dex+1</span>			
 			<span id="addVit">vit+1</span>
-			<span id="addEng">eng+1</span>			
+			<span id="addEng">eng+1</span>	
+			<span id="addLv">lv+1</span>
+
 		</div>	
 		
 		
 	</body>
 	
 </html>
-
-<script src="main.js"></script>
+<script src="template/game_const.js"></script>
+<script src="template/t_char.js"></script>
+<script src="class.js"></script>
 <script>
 
 	//初始化
@@ -43,6 +46,8 @@
 	var dom_addEng = document.getElementById("addEng");				//eng + 1
 	dom_addEng.addEventListener("mousedown", onPressed, false);
 
+	var dom_addLv = document.getElementById("addLv");				//lv + 1
+	dom_addLv.addEventListener("mousedown", onPressed, false);
 
 	var character = new Character(AMA);
 
@@ -57,28 +62,33 @@
 		//点击 增加力量
 		if (evt.target == dom_addStr)
 		{
-			character.setBasicStr(character._basicStr + 1);
+			character.addBasicStr();
 		}
 		
 		//点击 增加敏捷
 		if (evt.target == dom_addDex)
 		{
-			character.setBasicDex(character._basicDex + 1);
+			character.addBasicDex();
 		}
 
 		//点击 增加体力
 		if (evt.target == dom_addVit)
 		{
-			character.setBasicVit(character._basicVit + 1);
+			character.addBasicVit();
 		}
 		
 
 		//点击 增加能量
 		if (evt.target == dom_addEng)
 		{
-			character.setBasicEng(character._basicEng + 1);
+			character.addBasicEng();
 		}
 		
+		//点击 升级
+		if (evt.target == dom_addLv)
+		{
+			character.addLv();
+		}
 	}
 	
 	function onTick(tick)

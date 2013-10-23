@@ -1,3 +1,5 @@
+//pacman 2013-10-22 要先导入template.js才可以正常使用
+
 
 /*********************************
 		Tick管理器
@@ -121,34 +123,6 @@ TickMgr.prototype.removeTickListener = function(cbCaller, cbFunc)
 
 
 /*********************************
-		角色模板数据
-***********************************/
-//角色职业编号 (从0开始的正整数)
-var i = 0;
-var AMA = i ++;		//亚马逊
-var SOR = i ++;		//女巫
-var NEC = i ++;		//男巫
-var PAL = i ++;			//圣骑士
-var BAR = i ++;		//野蛮人
-var DRU = i ++;		//德鲁伊
-var ASN = i ++;		//刺客
-
-//--角色模板数据 (数组)
-var T_CHAR = new Array();
-//亚马逊
-T_CHAR[AMA] = new Object();		
-T_CHAR[AMA].INIT_STR = 20;			//起始力量
-T_CHAR[AMA].INIT_DEX = 25;			//起始敏捷
-T_CHAR[AMA].INIT_VIT = 20;			//起始活力
-T_CHAR[AMA].INIT_ENG = 15;			//起始能量
-T_CHAR[AMA].INIT_LIFE = 50;			//起始生命
-T_CHAR[AMA].LIFE_PER_LV = 2;			//每升一级增加的生命
-T_CHAR[AMA].MANA_PER_LV = 1.5;			//每升一级增加的魔法
-T_CHAR[AMA].LIFE_PER_VIT = 3;			//每点活力增加的生命
-T_CHAR[AMA].MANA_PER_ENG = 1.5;		//每点能量增加的魔法
-
-
-/*********************************
 			角色类
 ***********************************/
 //pacman 2013-10-19 使用失效和手动激活临近节点连锁重算的功能来优化数据重算
@@ -158,9 +132,11 @@ T_CHAR[AMA].MANA_PER_ENG = 1.5;		//每点能量增加的魔法
 function Character(class_)
 {
 	//成员变量声明
-	this._class = class_;	//职业
+	this._TData = undefined;		//模板数据		
+	this._class = undefined;		//职业
 	this._name = "";	//名称
 	this._lv = 0;		//等级
+	this._freeAttribPoints = 0;		//自由分配点数
 	
 	//--力量 ---
 	this._totalStr = 0;		//总力量
@@ -176,12 +152,12 @@ function Character(class_)
 	this._pctBonusDex = 0;	//（百分比）敏捷加成
 	this._toRecalTotalDex = false;		//是否将要重算总敏捷
 	
-	//-- 活力 ---
-	this._totalVit = 0;			//总活力
-	this._basicVit = 0;			//基础活力
-	this._bonusVit = 0;			//活力加成
-	this._pctBonusVit = 0;		//活力加成(百分比)
-	this._toRecalTotalVit = false;		//将要重算总活力
+	//-- 体力 ---
+	this._totalVit = 0;			//总体力
+	this._basicVit = 0;			//基础体力
+	this._bonusVit = 0;			//体力加成
+	this._pctBonusVit = 0;		//体力加成(百分比)
+	this._toRecalTotalVit = false;		//将要重算总体力
 	
 	//-- 能量 ---
 	this._totalEng = 0;			//总能量
@@ -207,9 +183,30 @@ function Character(class_)
 	this._toRecalTotalMana = false;		//是否将要重算总魔法	
 	
 	//初始设置
-	this.setLv(1);
-	this.setBasicVit(T_CHAR[this._class].INIT_VIT);
+	this.resetWithClass(class_);
+	
 }
+
+//---------------------
+//-- reset ---
+//---------------------
+//pacman 2013-10-20 按照指定的职业重置数据
+//其实就是setClass ，但是setClass这个动作比较特殊，游戏逻辑上某个角色不可以中途改变class
+//因此更换职业必须同时数据重置，所以叫resetWithClass
+//这个函数更多是为了重复使用Character对象而设立的
+Character.prototype.resetWithClass = function(class_)
+{
+	this._class = class_;
+	this._TData = T_CHAR[this._class];
+	this.setLv(1);
+	//只手动重置底层值，其余高级值的重置将自动被连锁执行
+	this.setBasicStr(this._TData.INIT_STR);	
+	this.setBasicDex(this._TData.INIT_DEX);	
+	this.setBasicVit(this._TData.INIT_VIT);	
+	this.setBasicEng(this._TData.INIT_ENG);	
+
+}
+
 
 //---------------------
 //-- 等级计算 ---
@@ -222,12 +219,38 @@ Character.prototype.setLv = function(value)
 
 	//激活相邻节点重算	
 	this.toRecalBasicLife();
+	this.toRecalBasicMana();
 }
 
+//pacman 2013-10-22 升级
+Character.prototype.addLv = function(value)
+{
+	if(!value) value = 1;
+
+	//奖励自由点数
+	this._freeAttribPoints += value * GAME_CONST.ATTRIBPOINTS_PER_LV;
+
+	//升级
+	this.setLv(this._lv + value);
+}
 
 //---------------------
 //-- 力量计算 ---
 //---------------------
+//从自由点数中给基础力量配点
+Character.prototype.addBasicStr = function(value)
+{
+	if(!value) value = 1;
+
+	//超限
+	if (value > this._freeAttribPoints) return;
+	else
+	{
+		this._freeAttribPoints -= value;
+		this.setBasicStr(this._basicStr + value);
+	}
+}
+
 //设置基础力量
 Character.prototype.setBasicStr = function(value)
 {
@@ -257,6 +280,20 @@ Character.prototype.updateTotalStr = function()
 //---------------------
 //-- 敏捷计算 ---
 //---------------------
+//从自由点数中给基础敏捷配点
+Character.prototype.addBasicDex = function(value)
+{
+	if(!value) value = 1;
+
+	//超限
+	if (value > this._freeAttribPoints) return;
+	else
+	{
+		this._freeAttribPoints -= value;
+		this.setBasicDex(this._basicDex + value);
+	}
+}
+
 //设置基础敏捷
 Character.prototype.setBasicDex = function(value)
 {
@@ -284,8 +321,22 @@ Character.prototype.updateTotalDex = function()
 
 
 //---------------------
-//-- 活力计算 ---
+//-- 体力计算 ---
 //---------------------
+//从自由点数中给基础体力配点
+Character.prototype.addBasicVit = function(value)
+{
+	if(!value) value = 1;
+
+	//超限
+	if (value > this._freeAttribPoints) return;
+	else
+	{
+		this._freeAttribPoints -= value;
+		this.setBasicVit(this._basicVit + value);
+	}
+}
+
 //设置基础vit
 Character.prototype.setBasicVit = function(value)
 {
@@ -296,7 +347,7 @@ Character.prototype.setBasicVit = function(value)
 	this.toRecalTotalVit();
 }
 
-//准备重算总活力
+//准备重算总体力
 Character.prototype.toRecalTotalVit = function()
 {
 	this._toRecalTotalVit = true;
@@ -305,16 +356,30 @@ Character.prototype.toRecalTotalVit = function()
 	this.toRecalBasicLife();
 }
 
-//重算总活力
+//重算总体力
 Character.prototype.updateTotalVit = function()
 {
 	this._totalVit = this._basicVit  * (1 + this._pctBonusVit) + this._bonusVit;
-	this._toRecalTotalVit = false;	
+	this._toRecalTotalVit = false;
 }
 
 //---------------------
 //-- 能量计算 ---
 //---------------------
+//从自由点数中给基础能量配点
+Character.prototype.addBasicEng = function(value)
+{
+	if(!value) value = 1;
+
+	//超限
+	if (value > this._freeAttribPoints) return;
+	else
+	{
+		this._freeAttribPoints -= value;
+		this.setBasicEng(this._basicEng + value);
+	}
+}
+
 //设置基础能量
 Character.prototype.setBasicEng = function(value)
 {
@@ -331,6 +396,7 @@ Character.prototype.toRecalTotalEng = function()
 	this._toRecalTotalEng = true;
 
 	//连锁
+	this.toRecalBasicMana();
 }
 
 //重算总能量
@@ -355,7 +421,7 @@ Character.prototype.toRecalBasicLife = function()
 //重算基本生命
 Character.prototype.updateBasicLife = function()
 {
-	this._basicLife = T_CHAR[AMA].INIT_LIFE + (this._lv - 1) * T_CHAR[AMA].LIFE_PER_LV + this._totalVit * T_CHAR[AMA].LIFE_PER_VIT;
+	this._basicLife = this._TData.INIT_LIFE + (this._lv - 1) * this._TData.LIFE_PER_LV + (this._totalVit -  this._TData.INIT_VIT) * this._TData.LIFE_PER_VIT;
 	this._toRecalBasicLife = false;
 }
 
@@ -377,7 +443,36 @@ Character.prototype.updateTotalLife = function()
 //---------------------
 //-- 魔法计算 ---
 //---------------------
-//todo
+//准备重算基础魔法
+Character.prototype.toRecalBasicMana = function()
+{
+	this._toRecalBaiscMana = true;
+
+	//连锁
+	this.toRecalTotalMana();
+}
+
+//重算基础魔法
+Character.prototype.updateBasicMana = function()
+{
+	this._basicMana = this._TData.INIT_MANA + (this._lv - 1) * this._TData.MANA_PER_LV + (this._totalEng - this._TData.INIT_ENG) * this._TData.MANA_PER_ENG;
+	this._toRecalBaiscMana = false;
+}
+
+//准备重算总魔法
+Character.prototype.toRecalTotalMana = function()
+{
+	this._toRecalTotalMana = true;
+
+	//连锁
+}
+
+//重算总魔法
+Character.prototype.updateTotalMana = function()
+{
+	this._totalMana = this._basicMana + this._bonusMana + this._pctBonusMana;
+	this._toRecalTotalMana = false;
+}
 
 
 //---------------------
@@ -386,7 +481,8 @@ Character.prototype.updateTotalLife = function()
 Character.prototype.update = function()
 {
 	//alert("update");
-	
+	//pacman 2013-10-20 必须按照先底层后高级的顺序逐步计算各种属性
+
 	//总力量
 	if (this._toRecalTotalStr)	this.updateTotalStr();
 	
@@ -400,10 +496,16 @@ Character.prototype.update = function()
 	if (this._toRecalTotalEng) this.updateTotalEng();
 
 	//基本生命
-	if(this._toRecalBasicLife)	this.updateBasicLife();
+	if (this._toRecalBasicLife)	this.updateBasicLife();
 	
 	//总生命
-	if(this._toRecalTotalLife)	this.updateTotalLife();
+	if (this._toRecalTotalLife)	this.updateTotalLife();
+
+	//基本魔法
+	if (this._toRecalBaiscMana) this.updateBasicMana();
+
+	//总魔法
+	if (this._toRecalTotalMana) this.updateTotalMana();
 	
 	
 }
@@ -420,4 +522,3 @@ Character.prototype.invalidateHandler = function()
 	this.update();
 }
 //end IInvalidate
-
