@@ -1,0 +1,85 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: d2txtanalyser - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD83.tmp" with contents
+[
+/nologo /ML /W3 /WX /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FR"d2txtanalyser___Win32_Release/" /Fp"d2txtanalyser___Win32_Release/d2txtanalyser.pch" /YX /Fo"d2txtanalyser___Win32_Release/" /Fd"d2txtanalyser___Win32_Release/" /FD /c 
+"I:\d2txtanalyser 2.0\src\mpq\Dcl_tbl.c"
+"I:\d2txtanalyser 2.0\src\mpq\Explode.c"
+"I:\d2txtanalyser 2.0\src\mpq\MpqView.c"
+"I:\d2txtanalyser 2.0\src\mpq\Wav_unp.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD83.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD84.tmp" with contents
+[
+/nologo /ML /W4 /WX /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FR"d2txtanalyser___Win32_Release/" /Fp"d2txtanalyser___Win32_Release/d2txtanalyser.pch" /YX /Fo"d2txtanalyser___Win32_Release/" /Fd"d2txtanalyser___Win32_Release/" /FD /c 
+"I:\d2txtanalyser 2.0\src\d2txtanalyser.c"
+"I:\d2txtanalyser 2.0\src\error.c"
+"I:\d2txtanalyser 2.0\src\filmem.c"
+"I:\d2txtanalyser 2.0\src\iniread.c"
+"I:\d2txtanalyser 2.0\src\test.c"
+"I:\d2txtanalyser 2.0\src\test_keys.c"
+"I:\d2txtanalyser 2.0\src\txtread.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD84.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD85.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"d2txtanalyser___Win32_Release/d2txtanalyser.pdb" /machine:I386 /out:"d2txtanalyser___Win32_Release/d2txtanalyser.exe" 
+".\d2txtanalyser___Win32_Release\Dcl_tbl.obj"
+".\d2txtanalyser___Win32_Release\Explode.obj"
+".\d2txtanalyser___Win32_Release\MpqView.obj"
+".\d2txtanalyser___Win32_Release\Wav_unp.obj"
+".\d2txtanalyser___Win32_Release\d2txtanalyser.obj"
+".\d2txtanalyser___Win32_Release\error.obj"
+".\d2txtanalyser___Win32_Release\filmem.obj"
+".\d2txtanalyser___Win32_Release\iniread.obj"
+".\d2txtanalyser___Win32_Release\test.obj"
+".\d2txtanalyser___Win32_Release\test_keys.obj"
+".\d2txtanalyser___Win32_Release\txtread.obj"
+]
+Creating command line "link.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD85.tmp"
+<h3>Output Window</h3>
+Compiling...
+Dcl_tbl.c
+Explode.c
+MpqView.c
+Wav_unp.c
+Compiling...
+d2txtanalyser.c
+error.c
+filmem.c
+iniread.c
+test.c
+test_keys.c
+txtread.c
+Linking...
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD87.tmp" with contents
+[
+/nologo /o"d2txtanalyser___Win32_Release/d2txtanalyser.bsc" 
+".\d2txtanalyser___Win32_Release\Dcl_tbl.sbr"
+".\d2txtanalyser___Win32_Release\Explode.sbr"
+".\d2txtanalyser___Win32_Release\MpqView.sbr"
+".\d2txtanalyser___Win32_Release\Wav_unp.sbr"
+".\d2txtanalyser___Win32_Release\d2txtanalyser.sbr"
+".\d2txtanalyser___Win32_Release\error.sbr"
+".\d2txtanalyser___Win32_Release\filmem.sbr"
+".\d2txtanalyser___Win32_Release\iniread.sbr"
+".\d2txtanalyser___Win32_Release\test.sbr"
+".\d2txtanalyser___Win32_Release\test_keys.sbr"
+".\d2txtanalyser___Win32_Release\txtread.sbr"]
+Creating command line "bscmake.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPD87.tmp"
+Creating browse info file...
+<h3>Output Window</h3>
+
+
+
+<h3>Results</h3>
+d2txtanalyser.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

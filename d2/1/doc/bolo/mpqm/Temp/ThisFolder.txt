@@ -1,0 +1,4 @@
+Don't delete this folder! The program needs it.
+All files in this temp folder will be deleted when you run the program, save this one.
+
+Be carefull ;)

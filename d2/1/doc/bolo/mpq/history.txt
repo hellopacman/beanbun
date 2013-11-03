@@ -1,0 +1,14 @@
+0.6
+---
+1.Multilanguage supported
+2.Added a tray icon
+3.Fixed many bugs
+4.Changed interface a bit
+
+0.5
+---
+First public version, all functions implemented
+
+0.3 native
+----------
+Native test version

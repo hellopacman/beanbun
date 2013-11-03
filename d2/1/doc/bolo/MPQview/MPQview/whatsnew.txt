@@ -1,0 +1,49 @@
+What's new in this release?
+
+Version 1.1beta
+- This is a BETA version and has not been fully tested to my satisfaction.
+  If you think you have a valid (read "reproducable and not related to
+  operation") bug, let me know. I will try to work it out with you.
+- Data file has been updated with some new files. I can't remember which
+  ones are new, but I suspect some people do not have this version anyway.
+- Added external file viewing support. Double click any file in the
+  archive. If it has a valid associated viewer, the viewer will be invoked
+  with the file (i.e. If you have the smacker player installed, it will be
+  launched to play a SMK file that you double click on). Unlike sound
+  files, this is not buffered so the file is actually extracted prior to
+  launching the associated viewer.
+- Added native wave playing. Double click a wave to hear it. This does work
+  for the _long_ waves that are the music for the game. They are buffered
+  somewhat so you don't have to wait for the whole file to extract before
+  it starts playing. Give it a try, seems to work okay for me, although
+  there is a slight delay before the song starts.
+- Obviously the interface has changed a bit. Due to numerous emails I have
+  received asking "How do I use this thing?" I decided to make it a little simpler. You can still change the data file without having to restart,
+  but you have to do it from the menu now. Same goes for the "Save list" feature. Also, I have updated the instructions to reflect these changes.
+  Please take the time to read them. Sorry, no compression this go round,
+  but I am looking into it. Remember, I have a job and I don't necessarily
+  have the time to put into MPQView that I would like to.
+
+Version 1.02
+- Fixed the font installation error. Sorry folks, I deserve a kick in the
+  pants for hardcoding the path to the font directory...
+
+Version 1.01
+
+- Fixed memory leak
+- Program now is a little more "system friendly" on large file reads
+- Added progress bar to show progress of file extraction
+- As an added bonus, if you don't have it, the program will install the
+  Xenotron font. (I'd like to give credit for this font, but I don't
+  remember where I got it from).
+- Changed the icon to something a little different. Here I must give credit
+  to Blizzard for their fine "data disk" image that is in the lower half of
+  the icon. I'm still not really satisfied with it, and if anyone would
+  like to donate an icon they feel is more appropriate, I would appreciate
+  it.
+- There's probably a few other things I can't remember.
+
+
+If you have any suggestions, comments, or bug reports, please contact:
+
+smims@hotmail.com

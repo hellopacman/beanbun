@@ -1,0 +1,48 @@
+This product is freeware. If you find it useful or have comments, the
+author may be contacted at:
+	smims@hotmail.com.
+
+Installation: The only requirement for installation is that the file
+'storm.dll' that ships with starcraft must either be in the same directory
+as the application, be located in the Windows or Windows\System directory,
+or located somewhere on your search path (specified by a 'PATH=' in your
+autoexec.bat). This file is not provided but may be found in your Starcraft
+installation directory. Versions of the DLL prior to Starcraft version 1.0
+will not work with this program.
+
+For best results, put the program in your Starcraft directory.
+
+** Warning** Be sure that the CORRECT version of the storm.dll is being
+used. If other versions are in the path, they may be used instead and the
+files will NOT be extracted correctly.
+
+
+To use the MPQ viewer:
+
+You may open an archive using the "Open archive" button. Highlight any
+files you wish to extract and press "Save" to save them to hard disk. Some
+of the files may be viewed by double clicking on them. The data file
+provided works for the Starcraft archives named "stardat.mpq" and
+"install.exe" (located in the Starcraft directory and on the Starcraft CD,
+respectively).
+
+You can change the data file that is being used by the viewer using the
+menu option "Open data file". This allows for the data file to be changed
+without restarting the application. The default data file is "sc_data.txt".
+
+Saving will save all selected files. If only one file is selected, you may
+choose the name you wish to save the file under. If multiple files are
+selected, you may either save using the directory structure from the
+archive, or save them all to one directory. If you choose a single
+directory, the file names are created by changing all "\" characters to
+"_" characters to avoid name collisions.
+
+Save list will save the list of files displayed to a selected text file.
+
+Use the filter to display only those files with a certain extension. For
+example, to extract all wave files, select the '*.wav' filter, select all
+listed files and then save them to the desired directory.
+
+The load data file and save list features were added to facilitate easier
+testing of files available in the archive. The data file can be modified and reloaded to reflect any changes made. Saving the list will save a data
+file that contains only valid files in the archive.

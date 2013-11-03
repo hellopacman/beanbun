@@ -25,9 +25,13 @@
 	</body>
 	
 </html>
-<script src="template/game_const.js"></script>
-<script src="template/t_char.js"></script>
-<script src="class.js"></script>
+<script src="class/game_const.js"></script>
+<script src="class/util.js"></script>
+<script src="class/ModTick.js"></script>
+<script src="class/t_char.js"></script>
+<script src="class/t_item.js"></script>
+<script src="class/ModItem.js"></script>
+<script src="class/ModChar.js"></script>
 <script>
 
 	//初始化
@@ -50,6 +54,8 @@
 	dom_addLv.addEventListener("mousedown", onPressed, false);
 
 	var character = new Character(AMA);
+	var weaponR = new WeaponR(T_WEAPON_LIST[0]);		
+	character.wearHandItem(weaponR, EQUIPMENT_SLOT.LEFT_HAND)
 
 	TickMgr.instance.clearAndStartTick(40);				//tick interval ms
 	TickMgr.instance.addTickListener(this, onTick);
